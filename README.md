@@ -1,29 +1,27 @@
 # Product Management Backend
 
-A Node.js + Express + TypeScript backend API for the Product Management Dashboard with JWT authentication and Firebase Firestore integration.
+A Node.js + Express + TypeScript backend API with JWT authentication and Firebase Firestore integration.
 
-## 🚀 Features
+## Features
 
 - JWT-based authentication with HTTP-only cookies
 - Firebase Firestore integration
 - TypeScript for type safety
 - RESTful API endpoints
-- CORS enabled for cross-origin requests
-- Secure cookie handling
+- CORS enabled
 
-## 📋 Prerequisites
+## Prerequisites
 
-Before you begin, ensure you have the following installed:
-- [Node.js](https://nodejs.org/) (v16 or higher)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-- [Firebase Account](https://firebase.google.com/) with a project created
+- Node.js (v16 or higher)
+- npm or yarn
+- Firebase Account with a project created
 
-## 🛠️ Installation
+## Installation
 
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/nafisnihal/product-management-backend.git
 cd product-management-backend
 ```
 
@@ -41,8 +39,6 @@ npm install
 4. Click **Generate New Private Key**
 5. Save the downloaded JSON file as `serviceAccountKey.json` in the root directory of this project
 
-**Important:** Never commit `serviceAccountKey.json` to version control!
-
 ### 4. Environment Configuration
 
 Create a `.env` file in the root directory:
@@ -57,6 +53,7 @@ COOKIE_DOMAIN=localhost
 ```
 
 **Environment Variables:**
+
 - `PORT` - Server port (default: 5000)
 - `NODE_ENV` - Environment (development/production)
 - `JWT_SECRET` - Secret key for JWT token generation (change in production!)
@@ -64,159 +61,32 @@ COOKIE_DOMAIN=localhost
 - `FRONTEND_URL` - Frontend application URL for CORS
 - `COOKIE_DOMAIN` - Cookie domain (use your domain in production)
 
-## 🏃 Running the Application
-
-### Development Mode
+## Running the Application
 
 ```bash
+# Development
 npm run dev
-```
 
-The server will start on `http://localhost:5000` with hot-reloading enabled.
-
-### Production Build
-
-```bash
-# Build TypeScript to JavaScript
+# Production
 npm run build
-
-# Run production server
 npm start
 ```
 
-### Clean Build
-
-```bash
-# Remove compiled files
-npm run clean
-```
-
-## 📡 API Endpoints
-
-### Health Check
-
-```http
-GET /api/health
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Server is running",
-  "timestamp": "2024-12-02T10:30:00.000Z"
-}
-```
+## API Endpoints
 
 ### Authentication
 
-#### Login
+- `POST /api/auth/login` - User login
+- `GET /api/auth/verify` - Verify authentication
+- `POST /api/auth/logout` - User logout
+- `GET /api/health` - Health check
 
-```http
-POST /api/auth/login
-Content-Type: application/json
+## Demo Credentials
 
-{
-  "email": "admin@demo.com",
-  "password": "admin123"
-}
-```
+- Email: `admin@demo.com`
+- Password: `admin123`
 
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Login successful",
-  "user": {
-    "id": "demo-user-123",
-    "email": "admin@demo.com",
-    "name": "Demo Admin"
-  }
-}
-```
-
-**Note:** Sets HTTP-only cookie with JWT token
-
-#### Verify Authentication
-
-```http
-GET /api/auth/verify
-Cookie: token=<jwt-token>
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "user": {
-    "id": "demo-user-123",
-    "email": "admin@demo.com",
-    "name": "Demo Admin"
-  }
-}
-```
-
-#### Logout
-
-```http
-POST /api/auth/logout
-Cookie: token=<jwt-token>
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Logout successful"
-}
-```
-
-## 🔐 Demo Credentials
-
-For testing purposes, use these credentials:
-
-- **Email:** `admin@demo.com`
-- **Password:** `admin123`
-
-## 🧪 Testing the API
-
-### Using cURL
-
-**Login:**
-```bash
-curl -X POST http://localhost:5000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"admin@demo.com","password":"admin123"}' \
-  -c cookies.txt -v
-```
-
-**Verify:**
-```bash
-curl http://localhost:5000/api/auth/verify \
-  -b cookies.txt
-```
-
-**Logout:**
-```bash
-curl -X POST http://localhost:5000/api/auth/logout \
-  -b cookies.txt
-```
-
-### Using Postman or Thunder Client
-
-1. Set request type to `POST`
-2. URL: `http://localhost:5000/api/auth/login`
-3. Headers: `Content-Type: application/json`
-4. Body (raw JSON):
-```json
-{
-  "email": "admin@demo.com",
-  "password": "admin123"
-}
-```
-5. Check cookies after successful login
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 product-management-backend/
@@ -244,53 +114,11 @@ product-management-backend/
 └── README.md
 ```
 
-## 🔒 Security Notes
+## Technologies Used
 
-- JWT tokens are stored in HTTP-only cookies to prevent XSS attacks
-- CORS is configured to only allow requests from the frontend URL
-- Service account keys should never be committed to version control
-- Change `JWT_SECRET` in production to a strong, random string
-- Use HTTPS in production for secure cookie transmission
-
-## 🚨 Troubleshooting
-
-### Port Already in Use
-
-If port 5000 is already in use:
-```bash
-# Change PORT in .env file
-PORT=5001
-```
-
-### Firebase Connection Issues
-
-- Verify `serviceAccountKey.json` is in the root directory
-- Check Firebase project settings
-- Ensure Firestore database is created in your Firebase project
-
-### CORS Errors
-
-- Verify `FRONTEND_URL` in `.env` matches your frontend URL
-- Check that `credentials: true` is set in frontend fetch requests
-
-### Cookie Not Being Set
-
-- Ensure `COOKIE_DOMAIN` matches your domain
-- In production, set `secure: true` and use HTTPS
-- Check that frontend includes `credentials: 'include'` in requests
-
-## 📦 Dependencies
-
-### Production
-- `express` - Web framework
-- `cors` - CORS middleware
-- `cookie-parser` - Cookie parsing
-- `jsonwebtoken` - JWT authentication
-- `firebase-admin` - Firebase Admin SDK
-- `dotenv` - Environment variable management
-
-### Development
-- `typescript` - TypeScript compiler
-- `ts-node` - TypeScript execution
-- `nodemon` - Auto-restart on file changes
-- `@types/*` - TypeScript type definitions
+- Node.js & Express.js
+- TypeScript
+- Firebase Firestore
+- JWT Authentication
+- Cookie Parser
+- CORS
