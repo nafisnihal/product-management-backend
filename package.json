@@ -19,16 +19,17 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "firebase-admin": "^13.6.0",
-    "jsonwebtoken": "^9.0.2"
-  },
-  "devDependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "typescript": "^5.9.3",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^24.10.1",
+    "@types/node": "^24.10.1"
+  },
+  "devDependencies": {
+
     "nodemon": "^3.1.11",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "ts-node": "^10.9.2"
   }
 }
