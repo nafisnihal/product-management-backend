@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { LoginCredentials, AuthRequest } from "../types";
+import { AuthRequest, LoginCredentials } from "../types";
 import { generateToken } from "../utils/jwt";
 
 // Demo credentials
@@ -44,10 +44,10 @@ export const login = (req: Request, res: Response): void => {
     // Set HTTP-only cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production", // HTTPS only in production
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      domain: process.env.COOKIE_DOMAIN || "localhost",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      ...(process.env.NODE_ENV === "production" ? {} : { domain: "localhost" }),
     });
 
     res.status(200).json({
@@ -74,7 +74,7 @@ export const logout = (req: Request, res: Response): void => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      domain: process.env.COOKIE_DOMAIN || "localhost",
+      ...(process.env.NODE_ENV === "production" ? {} : { domain: "localhost" }),
     });
 
     res.status(200).json({

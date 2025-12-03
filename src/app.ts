@@ -5,9 +5,23 @@ import authRoutes from "./routes/auth.routes";
 
 const app: Application = express();
 
-// CORS configuration
+// CORS configuration - works for both local and production
+const allowedOrigins =
+  process.env.NODE_ENV === "production"
+    ? [process.env.FRONTEND_URL || ""] // Production: only frontend URL
+    : ["http://localhost:3000", "http://localhost:3001"]; // Development: allow local ports
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  origin: function (origin: string | undefined, callback: Function) {
+    // Allow requests with no origin (Postman, mobile apps, etc.)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes("")) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200,
 };
@@ -27,6 +41,7 @@ app.get("/api/health", (req: Request, res: Response) => {
     success: true,
     message: "Server is running",
     timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || "development",
   });
 });
 
