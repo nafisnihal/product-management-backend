@@ -1,6 +1,6 @@
-import express, { Application, Request, Response } from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import express, { Application, Request, Response } from "express";
 import authRoutes from "./routes/auth.routes";
 
 const app: Application = express();
@@ -13,28 +13,38 @@ const allowedOrigins =
 
 const corsOptions = {
   origin: function (origin: string | undefined, callback: Function) {
-    // Allow requests with no origin (Postman, mobile apps, etc.) in development
-    if (!origin && process.env.NODE_ENV !== "production") {
+    console.log(`CORS check - Origin: ${origin}, Environment: ${process.env.NODE_ENV}`);
+    console.log(`Allowed origins:`, allowedOrigins);
+    
+    // Allow requests with no origin (like health checks, Postman, mobile apps, etc.)
+    if (!origin) {
+      console.log("Allowing request with no origin");
       return callback(null, true);
     }
 
-    // In production, require origin to be in allowed list
+    // In production, require FRONTEND_URL to be set
     if (process.env.NODE_ENV === "production" && !process.env.FRONTEND_URL) {
-      console.error("FRONTEND_URL environment variable is required in production");
+      console.error(
+        "FRONTEND_URL environment variable is required in production"
+      );
       return callback(new Error("CORS configuration error"));
     }
 
-    if (allowedOrigins.includes(origin || "")) {
+    if (allowedOrigins.includes(origin)) {
+      console.log(`Allowing origin: ${origin}`);
       callback(null, true);
     } else {
-      console.log(`CORS blocked origin: ${origin}. Allowed origins:`, allowedOrigins);
+      console.log(
+        `CORS blocked origin: ${origin}. Allowed origins:`,
+        allowedOrigins
+      );
       callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
   optionsSuccessStatus: 200,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
 };
 
 // Middleware
@@ -45,6 +55,19 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
+
+// Root endpoint
+app.get("/", (req: Request, res: Response) => {
+  res.status(200).json({
+    success: true,
+    message: "Product Management API is running",
+    version: "1.0.0",
+    endpoints: {
+      health: "/api/health",
+      auth: "/api/auth/*"
+    }
+  });
+});
 
 // Health check
 app.get("/api/health", (req: Request, res: Response) => {

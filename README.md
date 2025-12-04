@@ -54,12 +54,11 @@ COOKIE_DOMAIN=localhost
 
 **Environment Variables:**
 
-- `PORT` - Server port (default: 5000)
 - `NODE_ENV` - Environment (development/production)
+- `PORT` - Server port (default: 5000)
 - `JWT_SECRET` - Secret key for JWT token generation (change in production!)
 - `JWT_EXPIRES_IN` - JWT token expiration time (e.g., 7d, 24h, 60m)
 - `FRONTEND_URL` - Frontend application URL for CORS
-- `COOKIE_DOMAIN` - Cookie domain (use your domain in production)
 
 ## Running the Application
 
