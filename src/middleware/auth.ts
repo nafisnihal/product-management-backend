@@ -13,6 +13,8 @@ export const authenticate = (
     if (!token) {
       console.log("Authentication failed: No token found in cookies");
       console.log("Available cookies:", Object.keys(req.cookies));
+      console.log("All cookies:", req.cookies);
+      console.log("Raw Cookie header:", req.headers.cookie);
       res.status(401).json({
         success: false,
         message: "Authentication required",

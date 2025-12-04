@@ -81,6 +81,21 @@ app.get("/api/health", (req: Request, res: Response) => {
   });
 });
 
+// Debug endpoint for cookie troubleshooting
+app.get("/api/debug/cookies", (req: Request, res: Response) => {
+  res.status(200).json({
+    success: true,
+    cookies: req.cookies,
+    headers: {
+      cookie: req.headers.cookie,
+      origin: req.headers.origin,
+      referer: req.headers.referer,
+      userAgent: req.headers["user-agent"],
+    },
+    environment: process.env.NODE_ENV,
+  });
+});
+
 // 404 handler
 app.use((req: Request, res: Response) => {
   res.status(404).json({
