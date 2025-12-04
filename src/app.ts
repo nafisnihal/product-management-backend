@@ -13,9 +13,11 @@ const allowedOrigins =
 
 const corsOptions = {
   origin: function (origin: string | undefined, callback: Function) {
-    console.log(`CORS check - Origin: ${origin}, Environment: ${process.env.NODE_ENV}`);
+    console.log(
+      `CORS check - Origin: ${origin}, Environment: ${process.env.NODE_ENV}`
+    );
     console.log(`Allowed origins:`, allowedOrigins);
-    
+
     // Allow requests with no origin (like health checks, Postman, mobile apps, etc.)
     if (!origin) {
       console.log("Allowing request with no origin");
@@ -64,8 +66,8 @@ app.get("/", (req: Request, res: Response) => {
     version: "1.0.0",
     endpoints: {
       health: "/api/health",
-      auth: "/api/auth/*"
-    }
+      auth: "/api/auth/*",
+    },
   });
 });
 
