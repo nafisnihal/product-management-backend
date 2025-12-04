@@ -49,7 +49,6 @@ NODE_ENV=development
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
 JWT_EXPIRES_IN=7d
 FRONTEND_URL=http://localhost:3000
-COOKIE_DOMAIN=localhost
 ```
 
 **Environment Variables:**
