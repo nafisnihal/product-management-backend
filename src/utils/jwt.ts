@@ -21,6 +21,13 @@ export const verifyToken = (token: string): User | null => {
     const decoded = jwt.verify(token, JWT_SECRET) as User;
     return decoded;
   } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      console.log("JWT verification failed:", error.message);
+    } else if (error instanceof jwt.TokenExpiredError) {
+      console.log("JWT token expired:", error.message);
+    } else {
+      console.error("Unexpected JWT error:", error);
+    }
     return null;
   }
 };

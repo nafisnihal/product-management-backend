@@ -8,22 +8,33 @@ const app: Application = express();
 // CORS configuration - works for both local and production
 const allowedOrigins =
   process.env.NODE_ENV === "production"
-    ? [process.env.FRONTEND_URL || ""] // Production: only frontend URL
+    ? [process.env.FRONTEND_URL].filter(Boolean) // Production: only frontend URL if set
     : ["http://localhost:3000", "http://localhost:3001"]; // Development: allow local ports
 
 const corsOptions = {
   origin: function (origin: string | undefined, callback: Function) {
-    // Allow requests with no origin (Postman, mobile apps, etc.)
-    if (!origin) return callback(null, true);
+    // Allow requests with no origin (Postman, mobile apps, etc.) in development
+    if (!origin && process.env.NODE_ENV !== "production") {
+      return callback(null, true);
+    }
 
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes("")) {
+    // In production, require origin to be in allowed list
+    if (process.env.NODE_ENV === "production" && !process.env.FRONTEND_URL) {
+      console.error("FRONTEND_URL environment variable is required in production");
+      return callback(new Error("CORS configuration error"));
+    }
+
+    if (allowedOrigins.includes(origin || "")) {
       callback(null, true);
     } else {
+      console.log(`CORS blocked origin: ${origin}. Allowed origins:`, allowedOrigins);
       callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
   optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
 };
 
 // Middleware

@@ -11,6 +11,8 @@ export const authenticate = (
     const token = req.cookies.token;
 
     if (!token) {
+      console.log("Authentication failed: No token found in cookies");
+      console.log("Available cookies:", Object.keys(req.cookies));
       res.status(401).json({
         success: false,
         message: "Authentication required",
@@ -21,6 +23,7 @@ export const authenticate = (
     const user = verifyToken(token);
 
     if (!user) {
+      console.log("Authentication failed: Invalid or expired token");
       res.status(401).json({
         success: false,
         message: "Invalid or expired token",
@@ -31,6 +34,7 @@ export const authenticate = (
     req.user = user;
     next();
   } catch (error) {
+    console.error("Authentication error:", error);
     res.status(401).json({
       success: false,
       message: "Authentication failed",
