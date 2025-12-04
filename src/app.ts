@@ -13,14 +13,8 @@ const allowedOrigins =
 
 const corsOptions = {
   origin: function (origin: string | undefined, callback: Function) {
-    console.log(
-      `CORS check - Origin: ${origin}, Environment: ${process.env.NODE_ENV}`
-    );
-    console.log(`Allowed origins:`, allowedOrigins);
-
     // Allow requests with no origin (like health checks, Postman, mobile apps, etc.)
     if (!origin) {
-      console.log("Allowing request with no origin");
       return callback(null, true);
     }
 
@@ -33,13 +27,8 @@ const corsOptions = {
     }
 
     if (allowedOrigins.includes(origin)) {
-      console.log(`Allowing origin: ${origin}`);
       callback(null, true);
     } else {
-      console.log(
-        `CORS blocked origin: ${origin}. Allowed origins:`,
-        allowedOrigins
-      );
       callback(new Error("Not allowed by CORS"));
     }
   },
@@ -81,20 +70,7 @@ app.get("/api/health", (req: Request, res: Response) => {
   });
 });
 
-// Debug endpoint for cookie troubleshooting
-app.get("/api/debug/cookies", (req: Request, res: Response) => {
-  res.status(200).json({
-    success: true,
-    cookies: req.cookies,
-    headers: {
-      cookie: req.headers.cookie,
-      origin: req.headers.origin,
-      referer: req.headers.referer,
-      userAgent: req.headers["user-agent"],
-    },
-    environment: process.env.NODE_ENV,
-  });
-});
+
 
 // 404 handler
 app.use((req: Request, res: Response) => {

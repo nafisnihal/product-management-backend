@@ -42,7 +42,7 @@ export const login = (req: Request, res: Response): void => {
     const token = generateToken(user);
 
     // Set HTTP-only cookie
-    const cookieOptions = {
+    res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // HTTPS only in production
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
@@ -50,10 +50,7 @@ export const login = (req: Request, res: Response): void => {
       path: "/",
       // Don't set domain in production to allow cross-origin cookies
       ...(process.env.NODE_ENV !== "production" ? { domain: "localhost" } : {}),
-    } as any;
-
-    console.log("Setting cookie with options:", cookieOptions);
-    res.cookie("token", token, cookieOptions);
+    });
 
     res.status(200).json({
       success: true,
