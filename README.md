@@ -1,11 +1,10 @@
 # Product Management Backend
 
-A Node.js + Express + TypeScript backend API with JWT authentication and Firebase Firestore integration.
+A Node.js + Express + TypeScript backend API with JWT authentication.
 
 ## Features
 
 - JWT-based authentication with HTTP-only cookies
-- Firebase Firestore integration
 - TypeScript for type safety
 - RESTful API endpoints
 - CORS enabled
@@ -14,7 +13,6 @@ A Node.js + Express + TypeScript backend API with JWT authentication and Firebas
 
 - Node.js (v16 or higher)
 - npm or yarn
-- Firebase Account with a project created
 
 ## Installation
 
@@ -31,15 +29,7 @@ cd product-management-backend
 npm install
 ```
 
-### 3. Firebase Setup
-
-1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Select your project (or create a new one)
-3. Navigate to **Project Settings** → **Service Accounts**
-4. Click **Generate New Private Key**
-5. Save the downloaded JSON file as `serviceAccountKey.json` in the root directory of this project
-
-### 4. Environment Configuration
+### 3. Environment Configuration
 
 Create a `.env` file in the root directory:
 
@@ -89,8 +79,6 @@ npm start
 ```
 product-management-backend/
 ├── src/
-│   ├── config/
-│   │   └── firebase.ts          # Firebase configuration
 │   ├── controllers/
 │   │   └── auth.controller.ts   # Authentication logic
 │   ├── middleware/
@@ -103,7 +91,6 @@ product-management-backend/
 │   │   └── jwt.ts               # JWT utility functions
 │   ├── app.ts                   # Express app configuration
 │   └── server.ts                # Server entry point
-├── serviceAccountKey.json       # Firebase service account (DO NOT COMMIT!)
 ├── .env                         # Environment variables (DO NOT COMMIT!)
 ├── .gitignore
 ├── nodemon.json                 # Nodemon configuration
@@ -116,7 +103,6 @@ product-management-backend/
 
 - Node.js & Express.js
 - TypeScript
-- Firebase Firestore
 - JWT Authentication
 - Cookie Parser
 - CORS
